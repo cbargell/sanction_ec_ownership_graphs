@@ -24,6 +24,9 @@ The files should be run in the following order:
 5. `graph_exmple.py`
    - Plots the example network graph of a conglomerate.
    - ![Plot](component_009_network_iso.pdf)
+  
+6. `get_company_name.py`
+   - Function extracting the company name for a given company id.
      
 ---
 
