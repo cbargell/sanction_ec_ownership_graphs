@@ -20,6 +20,9 @@ The files should be run in the following order:
 
 4. `graph_prep.py`  
    - Harmonizes industry code/description fields (first non-missing industry code, longest industry description), renames ISO columns and drops rows with blank descriptions.
+  
+5. `graph_exmple.py`
+   - Plots the example network graph of a conglomerate.
      
 ---
 
