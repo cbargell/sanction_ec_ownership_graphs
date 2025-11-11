@@ -11,8 +11,8 @@ import pandas as pd
 import faiss  # pip install faiss-cpu  (or faiss-gpu)
 
 # path
-EMB_CSV   = "C:/Users/yichengy/Downloads/emb_vgae_directed.csv"
-OUT_CSV   = "C:/Users/yichengy/Downloads/top5_neighbors_for_targets.csv"
+EMB_CSV   = "O:/scratch/yicheng/230/emb_vgae_directed.csv"
+OUT_CSV   = "O:/scratch/yicheng/230/top5_neighbors_for_targets.csv"
 
 # edit here for target firm id
 TARGET_FIRMS = [
@@ -129,7 +129,7 @@ for p, fid in enumerate(TARGET_FIRMS):
         nbrs.append((j, float(s)))
         if len(nbrs) == 5:
             break
-    # Fallback in rare case self wasn't returned: still take first 5 unique
+    # fallback in rare case self wasn't returned- still take first 5 unique
     if len(nbrs) < 5:
         seen = set(j for j, _ in nbrs)
         for j, s in zip(Im[p], Dm[p]):

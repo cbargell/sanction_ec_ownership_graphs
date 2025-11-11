@@ -60,7 +60,7 @@ ids = nodes["firm_id"].astype(str).tolist()
 id2ix = {k:i for i,k in enumerate(ids)}
 N = len(ids)
 
-# sanitize edges -> indices, drop self-loops & duplicates
+# sanitize edges: indices, drop self-loops & duplicates
 E = (edges.assign(src_ix = edges["src"].map(id2ix),
                   dst_ix = edges["dst"].map(id2ix))
            .dropna(subset=["src_ix","dst_ix"]))
@@ -259,16 +259,16 @@ def encode_batch_mu_logstd(K_nodes, U_nodes):
       - X_* @ ... done with SciPy sparse; grads not needed w.r.t. input features.
       - (A_*[K,U] @ h_U) done as torch.sparse.mm to keep grads through h_U.
     """
-    # Map nodes to local indices within U
+    # map nodes to local indices within U
     idx_in_U = {int(n): i for i, n in enumerate(U_nodes)}
     K_local = np.array([idx_in_U[int(k)] for k in K_nodes], dtype=np.int64)
 
-    # --- First layer aggregations (SciPy) ---
+    # first layer aggregations 
     X_U = X_csr[U_nodes, :].toarray().astype(np.float32)                           # (|U| x IN_DIM)
     AinU_X = (A_in_csr[U_nodes, :]  @ X_csr).toarray().astype(np.float32)         # (|U| x IN_DIM)
     AoutU_X= (A_out_csr[U_nodes, :] @ X_csr).toarray().astype(np.float32)         # (|U| x IN_DIM)
 
-    # Torch tensors
+    # tensors
     XU_t   = torch.tensor(X_U,   dtype=torch.float32, device=DEVICE)
     AinU_t = torch.tensor(AinU_X,dtype=torch.float32, device=DEVICE)
     AoutU_t= torch.tensor(AoutU_X,dtype=torch.float32, device=DEVICE)
@@ -277,8 +277,8 @@ def encode_batch_mu_logstd(K_nodes, U_nodes):
     h_U = enc.s1.lin(H1)
     h_U = F.relu(h_U)                                                              # (|U| x HIDDEN)
 
-    # --- Second layer aggregations (torch sparse for grads) ---
-    # Submatrices A_in[K, U] and A_out[K, U]
+    # second layer aggregations
+    # submatrices A_in[K, U] and A_out[K, U]
     Ain_KU = A_in_csr[K_nodes, :][:, U_nodes]
     Aout_KU= A_out_csr[K_nodes, :][:, U_nodes]
 
@@ -306,7 +306,7 @@ def edges_to_local(edges, K_nodes, K_local):
         el[i,1] = g2l[int(v)]
     return el
 
-# ------------------------------ Evaluation helpers ------------------------------
+# evaluation helpers 
 @torch.no_grad()
 def encode_all_nodes_in_chunks(chunk=ENC_NODE_CHUNK):
     """Compute mu for ALL nodes by chunking the node set and using the same
