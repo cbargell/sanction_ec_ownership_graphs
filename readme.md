@@ -23,6 +23,7 @@ The files should be run in the following order:
   
 5. `graph_exmple.py`
    - Plots the example network graph of a conglomerate.
+   - ![Plot](component_009_network_iso.pdf)
      
 ---
 
