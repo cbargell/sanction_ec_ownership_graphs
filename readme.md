@@ -66,3 +66,21 @@ The files should be run in the following order:
 
 9. `helper_loss.py`  
    - Documents scripts plotting loss over minibatches and plots validation vs. test AUC and average precision over epochs/minibatches.
+  
+---
+
+## 3. Prediction
+
+The files should be run in the following order:
+
+1. `prediction_data.py'
+   - Generates crosswalks across firm identifiers (factset entity id, isin, bvdid)
+   - Merges the data on sanctions and export controls from Clayton et al. with out VGAE 64-d embeddings
+  
+2. `prediction.py'
+   - Executes firm-level prediction of sanctions and export controls in the future
+   - Contains all tested specifications:
+     - shallow NN with future-adjusted cross-entropy loss and weighted classes
+     - shallow NN with weighted classes (with and without firm-features, at the quarter, year and firm level)
+     - logistic regression with weighted classes (with and without firm-features, at the quarter, year and firm level)
+     - logistic regression
