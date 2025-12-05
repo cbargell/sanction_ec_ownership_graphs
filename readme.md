@@ -23,7 +23,7 @@ The files should be run in the following order:
   
 5. `graph_exmple.py`
    - Plots the example network graph of a conglomerate.
-   - ![Plot](component_009_network_iso.pdf)
+   - ![Plot](pre_processing/component_009_network_iso.pdf)
   
 6. `get_company_name.py`
    - Function extracting the company name for a given company id.
@@ -46,8 +46,23 @@ The files should be run in the following order:
    - Executes the training loop with mini-batch edge sampling and negative sampling on the shareholder-to-subsidiary graph (see report for details)
    - Selects the best epoch by AUC/AP, and writes the resulting node embeddings to dataset.
 
-4. `embedding_query.py`  
+4. `train_resume.py`  
+   - Adds checkpointing and auto-resume for VGAE training: it periodically saves encoder/decoder weights, the best validation AUC state, and loss histories, and if a checkpoint exists it reloads everything and continues from the next epoch (we used this as jobs on Sherlock have time limits, and we need to run for many epochs across multiple submissions).
+   - The rest same as train.py
+
+5. `conglomerate_train.py`  
+   - Loads pretrained firm embeddings and trains a set-encoder that turns the firms inside each conglomerate into a single conglomerate embedding, using a VICReg-style objective.
+   - computes conglomerate embeddings for all conglomerates and saves with each conglomerate’s size and representative firm IDs.
+
+6. `embedding_query.py`  
    - Streams the embedding space, L2-normalizes, builds a FAISS Flat (CPU/GPU) index, and for specified firm_ids in query exports their top-5 cosine neighbors.
 
-5. `closest_embedding.py`  
-   - Performs batched FAISS-Flat cosine search to find each embedding’s exact nearest neighbor (self-dropped) and writes the per-node results (full dataset)
+7. `closest_embedding.py`  
+   - Performs batched FAISS-Flat cosine search to find each embedding’s exact nearest neighbor (self-dropped) and writes the per-node results (full dataset).
+
+8. `visualization.py`  
+   - Panel A: loads firm embeddings, normalizes them, randomly samples up to 200,000 firms, projects them to 2D with UMAP, clusters the sampled firms into 150 groups using MiniBatch K-means, and plots the 2D points colored by cluster.
+   - Panel B (with conglomerates): computes weakly connected components as conglomerates, samples up to 200,000 firms, runs UMAP again, and plots the 2D points colored by the largest 60 conglomerates (others in grey).
+
+9. `helper_loss.py`  
+   - Documents scripts plotting loss over minibatches and plots validation vs. test AUC and average precision over epochs/minibatches.
