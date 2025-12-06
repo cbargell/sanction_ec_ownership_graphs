@@ -1,19 +1,19 @@
 # train_conglomerate_set_encoder.py
 # ------------------------------------------------------------
 # Train a non-contrastive (VICReg-style) set encoder to produce
-# conglomerate embeddings from pretrained firm embeddings (mu_i).
+# conglomerate embeddings from pretrained firm embeddings
 #
 # Features:
-#   - Conglomerates = weakly connected components on TRAIN graph (E_train)
-#   - Keeps a Python variable conglomerate_nodes: list[np.ndarray] node indices per conglomerate
-#   - Logs per-minibatch and per-epoch losses
-#   - Saves checkpoint + CSV loss snapshots EVERY 2 EPOCHS
-#   - Resume from latest checkpoint in OUT_DIR
+# - Conglomerates = weakly connected components on TRAIN graph (E_train)
+# - Keeps a Python variable conglomerate_nodes: list[np.ndarray] node indices per conglomerate
+# - Logs per-minibatch and per-epoch losses
+# - Saves checkpoint + CSV loss snapshots EVERY 2 EPOCHS
+# - Resume from latest checkpoint in OUT_DIR
 #
 # Outputs:
-#   1) Conglomerate membership as CSR-like arrays (indptr, indices) in NPZ
-#   2) Conglomerate embeddings g_C for every conglomerate (CSV) at the end
-#   3) Checkpoints: setencoder_ckpt_epoch_XXX.pt + loss CSVs
+# -Conglomerate membership as CSR-like arrays (indptr, indices) in NPZ
+# -Conglomerate embeddings g_C for every conglomerate (CSV) at the end
+# -Checkpoints: setencoder_ckpt_epoch_XXX.pt + loss CSVs
 # ------------------------------------------------------------
 
 import os, random, glob
